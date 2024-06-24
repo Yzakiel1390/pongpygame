@@ -1,11 +1,11 @@
 import pygame as py, sys, random
 from time import sleep
 
-WINDOW_SIZE = (1200, 700)
-PADDLE_SIZE = (20, 100)
-BALL_SIZE = 20
+WINDOW_SIZE: tuple[int, ...] = (1200, 700)
+PADDLE_SIZE: tuple[int, ...] = (20, 100)
+BALL_SIZE: int = 20
 BALL_SPEED, PADDLE_SPEED = 7, 7
-COLORS = {
+COLORS: dict[str, tuple[int, ...]] = {
     "BLACK": (0, 0, 0),
     "GRAY": (200, 200, 200),
     "WHITE": (255, 255, 255),
@@ -14,15 +14,15 @@ COLORS = {
 }
 
 py.init()
-clock = py.time.Clock()
-screen = py.display.set_mode((WINDOW_SIZE))
+clock: py.time.Clock = py.time.Clock()
+screen: py.Surface = py.display.set_mode((WINDOW_SIZE))
 py.display.set_caption("Pong")
 
-ball = py.Rect(screen.get_width() / 2 - BALL_SIZE / 2, screen.get_height() / 2 - BALL_SIZE / 2, BALL_SIZE, BALL_SIZE)
-player1 = py.Rect(PADDLE_SIZE[0] / 2, screen.get_height() / 2 - PADDLE_SIZE[1] / 2, PADDLE_SIZE[0], PADDLE_SIZE[1])
-player2 = py.Rect(screen.get_width() - (PADDLE_SIZE[0] + PADDLE_SIZE[0] / 2), screen.get_height() / 2 - PADDLE_SIZE[1] / 2, PADDLE_SIZE[0], PADDLE_SIZE[1])
+ball: py.Rect = py.Rect(screen.get_width() / 2 - BALL_SIZE / 2, screen.get_height() / 2 - BALL_SIZE / 2, BALL_SIZE, BALL_SIZE)
+player1: py.Rect = py.Rect(PADDLE_SIZE[0] / 2, screen.get_height() / 2 - PADDLE_SIZE[1] / 2, PADDLE_SIZE[0], PADDLE_SIZE[1])
+player2: py.Rect = py.Rect(screen.get_width() - (PADDLE_SIZE[0] + PADDLE_SIZE[0] / 2), screen.get_height() / 2 - PADDLE_SIZE[1] / 2, PADDLE_SIZE[0], PADDLE_SIZE[1])
 ball_speed_x, ball_speed_y = BALL_SPEED * random.choice((1, -1)), 7 * random.choice((1, -1))
-player_speed = PADDLE_SPEED
+player_speed: int = PADDLE_SPEED
 player1_points, player2_points = 0, 0
 
 def ball_animation() -> None:
@@ -48,13 +48,13 @@ def ball_reset() -> None:
     ball_speed_y *= random.choice((1, -1))
     ball.center = (screen.get_width()/2, screen.get_height()/2)
 
-def player1_animation(keys) -> None:
+def player1_animation(keys: py.key.ScancodeWrapper) -> None:
     if keys[py.K_w] and player1.top >= 0:
         player1.y -= player_speed
     if keys[py.K_s] and player1.bottom <= screen.get_height():
         player1.y += player_speed
 
-def player2_animation(keys, gamemode: int) -> None:
+def player2_animation(keys: py.key.ScancodeWrapper, gamemode: int) -> None:
     if (gamemode == 1):
         if keys[py.K_UP] and player2.top >= 0:
             player2.y -= player_speed
@@ -107,7 +107,7 @@ def main() -> None:
 
         draw()
         ball_animation()
-        key = py.key.get_pressed()
+        key: py.key.ScancodeWrapper = py.key.get_pressed()
         player1_animation(key)
         player2_animation(key, gamemode)
         
